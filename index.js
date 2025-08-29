@@ -1,9 +1,10 @@
-const express = require("express");
-const app = express();
-const postsRouter = require("./routes/posts_route.js");
 require("dotenv").config();
+const express = require("express");
+const postsRouter = require("./routes/posts_route.js");
+const app = express();
 const port = process.env.PORT;
 
+app.use(express.json());
 app.use("/posts", postsRouter);
 
 app.listen(port, () => {
