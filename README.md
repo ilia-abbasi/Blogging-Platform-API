@@ -1,2 +1,2 @@
-# Blogging-Platform-API
+# Blogging Platform API
 The project assignment for roadmap.sh
