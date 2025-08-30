@@ -1,4 +1,4 @@
-function makeResponseObj(success, message, data) {
+function makeResponseObj(success, message, data = {}) {
   return { success, message, data };
 }
 
