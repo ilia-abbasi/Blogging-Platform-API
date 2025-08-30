@@ -1,8 +1,10 @@
+const { isArray, isInteger } = require("lodash");
+
 function validateID(id) {
   if (isNaN(id)) {
     return "ID must be a number";
   }
-  if (!Number.isInteger(id)) {
+  if (!isInteger(id)) {
     return "ID must be an integer";
   }
 
@@ -55,11 +57,20 @@ function validateTags(tags) {
   if (!tags) {
     return "tags is required";
   }
-  if (!Array.isArray(tags)) {
+  if (!isArray(tags)) {
     return "tags must be an array";
   }
   if (!tags.length) {
     return "tags must have at least 1 item";
+  }
+
+  for (const tag of tags) {
+    if (typeof tag !== "string") {
+      return "tags items must be strings";
+    }
+    if (tag.length > 30) {
+      return "tags items length can not exceed 30";
+    }
   }
 
   return "success";
