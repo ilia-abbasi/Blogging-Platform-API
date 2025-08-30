@@ -1,41 +1,31 @@
 const { pool } = require("../models/db.js");
 const { makeResponseObj } = require("../models/response.js");
+const {
+  validateTitle,
+  validateContent,
+  validateCategory,
+  validateTags,
+  validateID,
+} = require("../helpers/validation.js");
 
 async function createPost(req, res) {
   const title = req.body.title;
   const content = req.body.content;
   const category = req.body.category;
   const tags = req.body.tags;
+  const validationResults = [];
 
-  if (!title || !content || !category || !tags || !tags.length) {
-    const resObj = makeResponseObj(
-      false,
-      "title, content, category and tags are all mandatory"
-    );
-    return res.status(422).send(resObj);
-  }
+  validationResults.push(validateTitle(title));
+  validationResults.push(validateContent(content));
+  validationResults.push(validateCategory(category));
+  validationResults.push(validateTags(tags));
 
-  if (title.length > 50 || title.length < 1) {
-    const resObj = makeResponseObj(
-      false,
-      "Title length can only be from 1 to 50"
-    );
-    return res.status(400).send(resObj);
-  }
+  for (const validationResult of validationResults) {
+    if (validationResult === "success") {
+      continue;
+    }
 
-  if (content.length > 10000 || content.length < 1) {
-    const resObj = makeResponseObj(
-      false,
-      "Content length can only be from 1 to 10000"
-    );
-    return res.status(400).send(resObj);
-  }
-
-  if (category.length > 30 || category.length < 1) {
-    const resObj = makeResponseObj(
-      false,
-      "Category length can only be from 1 to 30"
-    );
+    const resObj = makeResponseObj(false, validationResult);
     return res.status(400).send(resObj);
   }
 
@@ -64,4 +54,46 @@ async function createPost(req, res) {
   return res.status(201).send(resObj);
 }
 
-module.exports = { createPost };
+async function updatePost(req, res) {
+  const id = req.params.id;
+  const title = req.body.title;
+  const content = req.body.content;
+  const category = req.body.category;
+  const tags = req.body.tags;
+  const validationResults = [];
+  const providedParams = {};
+
+  validationResults.push(validateID(id));
+  if (title) {
+    validationResults.push(validateContent(title));
+    providedParams.title = title;
+  }
+  if (content) {
+    validationResults.push(validateContent(content));
+    providedParams.content = content;
+  }
+  if (category) {
+    validationResults.push(validateContent(category));
+    providedParams.category = category;
+  }
+  if (tags) {
+    validationResults.push(validateContent(tags));
+    providedParams.tags = tags;
+  }
+
+  for (const validationResult of validationResults) {
+    if (validationResult === "success") {
+      continue;
+    }
+
+    const resObj = makeResponseObj(false, validationResult);
+    return res.status(400).send(resObj);
+  }
+
+  let query = ""; // temp
+}
+
+module.exports = {
+  createPost,
+  updatePost,
+};
