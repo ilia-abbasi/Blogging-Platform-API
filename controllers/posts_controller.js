@@ -103,20 +103,18 @@ async function updatePost(req, res) {
     return res.status(400).send(resObj);
   }
 
-  let query = "UPDATE posts SET ";
+  let query = "UPDATE posts SET updated_at = NOW(), ";
   let i = 1;
   for (const key in providedParams) {
     query = `${query}${key} = $${i}, `;
     i++;
   }
   query = query.slice(0, -2);
-  query = `${query} WHERE id = $${i};`;
+  query = `${query} WHERE id = $${i} RETURNING *;`;
 
   let result;
   try {
     result = await pool.query(query, [...Object.values(providedParams), id]);
-
-    console.log(`Database: Updated post with an ID of ${id}`);
   } catch (err) {
     console.log(`Database: Could not update post. ${err}`);
 
@@ -128,7 +126,17 @@ async function updatePost(req, res) {
     return res.status(500).send(resObj);
   }
 
-  const resObj = makeResponseObj(true, "Updated post");
+  if (isEmpty(result.rows[0])) {
+    console.log(`Database: No posts found with an ID of ${id}`);
+
+    const resObj = makeResponseObj(false, "Post was not found");
+
+    return res.status(404).send(resObj);
+  }
+
+  console.log(`Database: Updated post with an ID of ${id}`);
+
+  const resObj = makeResponseObj(true, "Updated post", result.rows[0]);
 
   return res.status(200).send(resObj);
 }
