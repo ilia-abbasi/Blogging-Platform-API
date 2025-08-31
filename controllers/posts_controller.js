@@ -251,9 +251,13 @@ async function getPosts(req, res) {
     return res.status(500).send(resObj);
   }
 
-  console.log("Database: Got posts");
+  let message = "Got posts";
+  if (isEmpty(result.rows)) {
+    message = "No matches";
+  }
+  console.log(`Database: ${message}`);
 
-  const resObj = makeResponseObj(true, "Got posts", result.rows);
+  const resObj = makeResponseObj(true, message, result.rows);
 
   return res.status(200).send(resObj);
 }
