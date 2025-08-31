@@ -223,10 +223,23 @@ async function getSinglePost(req, res) {
 }
 
 async function getPosts(req, res) {
-  const query = "SELECT * FROM posts;";
+  let query = "SELECT * FROM posts";
+  const term = req.query.term;
+
+  if (term) {
+    query = `
+    ${query} WHERE title ILIKE $1
+    OR content ILIKE $1
+    OR category ILIKE $1
+    `;
+  }
+
+  query = `${query};`;
   let result;
   try {
-    result = await pool.query(query);
+    result = term
+      ? await pool.query(query, [`%${term}%`])
+      : await pool.query(query);
   } catch (err) {
     console.log(`Database: Could not get posts. ${err}`);
 
