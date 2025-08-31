@@ -141,7 +141,49 @@ async function updatePost(req, res) {
   return res.status(200).send(resObj);
 }
 
+async function deletePost(req, res) {
+  const id = Number(req.params.id);
+  const validationResult = validateID(id);
+
+  if (validationResult !== "success") {
+    const resObj = makeResponseObj(false, validationResult);
+
+    return res.status(400).send(resObj);
+  }
+
+  const query = "DELETE FROM posts WHERE id = $1;";
+  let result;
+  try {
+    result = await pool.query(query, [id]);
+  } catch (err) {
+    console.log(`Database: Could not delete post. ${err}`);
+
+    const resObj = makeResponseObj(
+      false,
+      "Something went wrong while completing your request"
+    );
+
+    return res.status(500).send(resObj);
+  }
+
+  if (!result.rowCount) {
+    console.log(`Database: No posts found with an ID of ${id}`);
+
+    const resObj = makeResponseObj(false, "Post was not found");
+
+    return res.status(404).send(resObj);
+  }
+
+  console.log(`Database: Deleted post with an ID of ${id}`);
+
+  const resObj = makeResponseObj(true, "Deleted post");
+
+  return res.status(204).send(resObj);
+  // resObj will be discarded anyway but I will keep this code
+}
+
 module.exports = {
   createPost,
   updatePost,
+  deletePost,
 };
