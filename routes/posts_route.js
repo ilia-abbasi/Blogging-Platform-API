@@ -6,10 +6,11 @@ const {
   updatePost,
   deletePost,
   getSinglePost,
+  getPosts,
 } = require("../controllers/posts_controller");
 const router = express.Router();
 
-router.get("/", () => {});
+router.get("/", getPosts);
 router.post("/", createPost);
 
 router.get("/:id", getSinglePost);

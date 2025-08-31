@@ -222,9 +222,33 @@ async function getSinglePost(req, res) {
   return res.status(200).send(resObj);
 }
 
+async function getPosts(req, res) {
+  const query = "SELECT * FROM posts;";
+  let result;
+  try {
+    result = await pool.query(query);
+  } catch (err) {
+    console.log(`Database: Could not get posts. ${err}`);
+
+    const resObj = makeResponseObj(
+      false,
+      "Something went wrong while completing your request"
+    );
+
+    return res.status(500).send(resObj);
+  }
+
+  console.log("Database: Got posts");
+
+  const resObj = makeResponseObj(true, "Got posts", result.rows);
+
+  return res.status(200).send(resObj);
+}
+
 module.exports = {
   createPost,
   updatePost,
   deletePost,
   getSinglePost,
+  getPosts,
 };
