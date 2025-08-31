@@ -182,8 +182,49 @@ async function deletePost(req, res) {
   // resObj will be discarded anyway but I will keep this code
 }
 
+async function getSinglePost(req, res) {
+  const id = Number(req.params.id);
+  const validationResult = validateID(id);
+
+  if (validationResult !== "success") {
+    const resObj = makeResponseObj(false, validationResult);
+
+    return res.status(400).send(resObj);
+  }
+
+  const query = "SELECT * FROM posts WHERE id = $1;";
+  let result;
+  try {
+    result = await pool.query(query, [id]);
+  } catch (err) {
+    console.log(`Database: Could not get post. ${err}`);
+
+    const resObj = makeResponseObj(
+      false,
+      "Something went wrong while completing your request"
+    );
+
+    return res.status(500).send(resObj);
+  }
+
+  if (isEmpty(result.rows[0])) {
+    console.log(`Database: No posts found with an ID of ${id}`);
+
+    const resObj = makeResponseObj(false, "Post was not found");
+
+    return res.status(404).send(resObj);
+  }
+
+  console.log(`Database: Got post with an ID of ${id}`);
+
+  const resObj = makeResponseObj(true, "Got post", result.rows[0]);
+
+  return res.status(200).send(resObj);
+}
+
 module.exports = {
   createPost,
   updatePost,
   deletePost,
+  getSinglePost,
 };
