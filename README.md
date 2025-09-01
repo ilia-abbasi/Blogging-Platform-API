@@ -60,4 +60,4 @@ The source code is formatted with [Prettier](https://prettier.io/).
 ---
 
 Read the docs [here](https://github.com/ilia-abbasi/Blogging-Platform-API/blob/main/Documentation.md).  
-Weather-API is licensed under the [GPL-3.0 license](https://github.com/ilia-abbasi/Blogging-Platform-API/blob/main/LICENSE).
+Blogging-Platform-API is licensed under the [GPL-3.0 license](https://github.com/ilia-abbasi/Blogging-Platform-API/blob/main/LICENSE).
