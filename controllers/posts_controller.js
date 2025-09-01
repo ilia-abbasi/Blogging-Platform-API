@@ -9,7 +9,7 @@ const {
   validateID,
 } = require("../helpers/validation.js");
 
-async function createPost(req, res) {
+async function createPost(req, res, next) {
   const title = req.body.title;
   const content = req.body.content;
   const category = req.body.category;
@@ -45,12 +45,8 @@ async function createPost(req, res) {
   } catch (err) {
     console.log(`Database: Could not insert post. ${err}`);
 
-    const resObj = makeResponseObj(
-      false,
-      "Something went wrong while completing your request"
-    );
-
-    return res.status(500).send(resObj);
+    next(err);
+    return;
   }
 
   const resObj = makeResponseObj(true, "Created post", result.rows[0]);
@@ -58,7 +54,7 @@ async function createPost(req, res) {
   return res.status(201).send(resObj);
 }
 
-async function updatePost(req, res) {
+async function updatePost(req, res, next) {
   const id = Number(req.params.id);
   const title = req.body.title;
   const content = req.body.content;
@@ -118,12 +114,8 @@ async function updatePost(req, res) {
   } catch (err) {
     console.log(`Database: Could not update post. ${err}`);
 
-    const resObj = makeResponseObj(
-      false,
-      "Something went wrong while completing your request"
-    );
-
-    return res.status(500).send(resObj);
+    next(err);
+    return;
   }
 
   if (isEmpty(result.rows[0])) {
@@ -141,7 +133,7 @@ async function updatePost(req, res) {
   return res.status(200).send(resObj);
 }
 
-async function deletePost(req, res) {
+async function deletePost(req, res, next) {
   const id = Number(req.params.id);
   const validationResult = validateID(id);
 
@@ -158,12 +150,8 @@ async function deletePost(req, res) {
   } catch (err) {
     console.log(`Database: Could not delete post. ${err}`);
 
-    const resObj = makeResponseObj(
-      false,
-      "Something went wrong while completing your request"
-    );
-
-    return res.status(500).send(resObj);
+    next(err);
+    return;
   }
 
   if (!result.rowCount) {
@@ -182,7 +170,7 @@ async function deletePost(req, res) {
   // resObj will be discarded anyway but I will keep this code
 }
 
-async function getSinglePost(req, res) {
+async function getSinglePost(req, res, next) {
   const id = Number(req.params.id);
   const validationResult = validateID(id);
 
@@ -199,12 +187,8 @@ async function getSinglePost(req, res) {
   } catch (err) {
     console.log(`Database: Could not get post. ${err}`);
 
-    const resObj = makeResponseObj(
-      false,
-      "Something went wrong while completing your request"
-    );
-
-    return res.status(500).send(resObj);
+    next(err);
+    return;
   }
 
   if (isEmpty(result.rows[0])) {
@@ -222,7 +206,7 @@ async function getSinglePost(req, res) {
   return res.status(200).send(resObj);
 }
 
-async function getPosts(req, res) {
+async function getPosts(req, res, next) {
   let query = "SELECT * FROM posts";
   const term = req.query.term;
 
@@ -243,12 +227,8 @@ async function getPosts(req, res) {
   } catch (err) {
     console.log(`Database: Could not get posts. ${err}`);
 
-    const resObj = makeResponseObj(
-      false,
-      "Something went wrong while completing your request"
-    );
-
-    return res.status(500).send(resObj);
+    next(err);
+    return;
   }
 
   let message = "Got posts";

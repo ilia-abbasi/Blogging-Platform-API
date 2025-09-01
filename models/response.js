@@ -37,9 +37,22 @@ function send418Error(req, res) {
   return res.status(418).send(resObj);
 }
 
+function generalErrorHandler(err, req, res, next) {
+  console.log(`An error occurred: ${err.message}`);
+  console.log(err.stack);
+
+  const resObj = makeResponseObj(
+    false,
+    "Something went wrong while completing your request"
+  );
+
+  return res.status(500).send(resObj);
+}
+
 module.exports = {
   makeResponseObj,
   send404Error,
   send405Error,
   send418Error,
+  generalErrorHandler,
 };
