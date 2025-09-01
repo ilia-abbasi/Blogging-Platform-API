@@ -19,9 +19,23 @@ There are no authentication or authorization.
    ```
 
 2. Install dependencies:
+
    ```sh
    npm install
    ```
+
+3. Create the `.env` file in the root of the project and set the variables:
+
+   ```env
+   PORT=your_port
+   DB_USER=database_username
+   DB_HOST=database_host
+   DB_NAME=database_name
+   DB_PASSWORD=database_password
+   DB_PORT=database_port
+   ```
+
+4. Create the `posts` table in your postgres database based on the [validation rules](https://github.com/ilia-abbasi/Blogging-Platform-API/blob/main/Documentation.md#validation-rules).
 
 ## Usage
 
@@ -45,5 +59,5 @@ The source code is formatted with [Prettier](https://prettier.io/).
 
 ---
 
-Read the docs here.  
+Read the docs [here](https://github.com/ilia-abbasi/Blogging-Platform-API/blob/main/Documentation.md).  
 Weather-API is licensed under the [GPL-3.0 license](https://github.com/ilia-abbasi/Blogging-Platform-API/blob/main/LICENSE).
