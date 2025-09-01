@@ -27,7 +27,7 @@ async function createPost(req, res, next) {
     }
 
     const resObj = makeResponseObj(false, validationResult);
-    return res.status(400).send(resObj);
+    return res.status(400).json(resObj);
   }
 
   const query = `
@@ -51,7 +51,7 @@ async function createPost(req, res, next) {
 
   const resObj = makeResponseObj(true, "Created post", result.rows[0]);
 
-  return res.status(201).send(resObj);
+  return res.status(201).json(resObj);
 }
 
 async function updatePost(req, res, next) {
@@ -87,7 +87,7 @@ async function updatePost(req, res, next) {
       "At least one parameter must be provided to update the post"
     );
 
-    return res.status(400).send(resObj);
+    return res.status(400).json(resObj);
   }
 
   for (const validationResult of validationResults) {
@@ -96,7 +96,7 @@ async function updatePost(req, res, next) {
     }
 
     const resObj = makeResponseObj(false, validationResult);
-    return res.status(400).send(resObj);
+    return res.status(400).json(resObj);
   }
 
   let query = "UPDATE posts SET updated_at = NOW(), ";
@@ -123,14 +123,14 @@ async function updatePost(req, res, next) {
 
     const resObj = makeResponseObj(false, "Post was not found");
 
-    return res.status(404).send(resObj);
+    return res.status(404).json(resObj);
   }
 
   console.log(`Database: Updated post with an ID of ${id}`);
 
   const resObj = makeResponseObj(true, "Updated post", result.rows[0]);
 
-  return res.status(200).send(resObj);
+  return res.status(200).json(resObj);
 }
 
 async function deletePost(req, res, next) {
@@ -140,7 +140,7 @@ async function deletePost(req, res, next) {
   if (validationResult !== "success") {
     const resObj = makeResponseObj(false, validationResult);
 
-    return res.status(400).send(resObj);
+    return res.status(400).json(resObj);
   }
 
   const query = "DELETE FROM posts WHERE id = $1;";
@@ -159,14 +159,14 @@ async function deletePost(req, res, next) {
 
     const resObj = makeResponseObj(false, "Post was not found");
 
-    return res.status(404).send(resObj);
+    return res.status(404).json(resObj);
   }
 
   console.log(`Database: Deleted post with an ID of ${id}`);
 
   const resObj = makeResponseObj(true, "Deleted post");
 
-  return res.status(204).send(resObj);
+  return res.status(204).json(resObj);
   // resObj will be discarded anyway but I will keep this code
 }
 
@@ -177,7 +177,7 @@ async function getSinglePost(req, res, next) {
   if (validationResult !== "success") {
     const resObj = makeResponseObj(false, validationResult);
 
-    return res.status(400).send(resObj);
+    return res.status(400).json(resObj);
   }
 
   const query = "SELECT * FROM posts WHERE id = $1;";
@@ -196,14 +196,14 @@ async function getSinglePost(req, res, next) {
 
     const resObj = makeResponseObj(false, "Post was not found");
 
-    return res.status(404).send(resObj);
+    return res.status(404).json(resObj);
   }
 
   console.log(`Database: Got post with an ID of ${id}`);
 
   const resObj = makeResponseObj(true, "Got post", result.rows[0]);
 
-  return res.status(200).send(resObj);
+  return res.status(200).json(resObj);
 }
 
 async function getPosts(req, res, next) {
@@ -239,7 +239,7 @@ async function getPosts(req, res, next) {
 
   const resObj = makeResponseObj(true, message, result.rows);
 
-  return res.status(200).send(resObj);
+  return res.status(200).json(resObj);
 }
 
 module.exports = {

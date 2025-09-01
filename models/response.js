@@ -5,7 +5,7 @@ function makeResponseObj(success, message, data = {}) {
 function send404Error(req, res) {
   const resObj = makeResponseObj(false, "Not found");
 
-  return res.status(404).send(resObj);
+  return res.status(404).json(resObj);
 }
 
 function send405Error(allowedMethods) {
@@ -23,7 +23,7 @@ function send405Error(allowedMethods) {
     );
 
     res.set("Allow", allowHeaderValue);
-    return res.status(405).send(resObj);
+    return res.status(405).json(resObj);
   };
 }
 
@@ -34,7 +34,7 @@ function send418Error(req, res) {
       "and thus can not help with brewing coffee"
   );
 
-  return res.status(418).send(resObj);
+  return res.status(418).json(resObj);
 }
 
 function generalErrorHandler(err, req, res, next) {
@@ -46,7 +46,7 @@ function generalErrorHandler(err, req, res, next) {
     "Something went wrong while completing your request"
   );
 
-  return res.status(500).send(resObj);
+  return res.status(500).json(resObj);
 }
 
 module.exports = {
