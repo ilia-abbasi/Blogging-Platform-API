@@ -27,4 +27,19 @@ function send405Error(allowedMethods) {
   };
 }
 
-module.exports = { makeResponseObj, send404Error, send405Error };
+function send418Error(req, res) {
+  const resObj = makeResponseObj(
+    false,
+    "Unfortunately the server identifies itself as a teapot " +
+      "and thus can not help with brewing coffee"
+  );
+
+  return res.status(418).send(resObj);
+}
+
+module.exports = {
+  makeResponseObj,
+  send404Error,
+  send405Error,
+  send418Error,
+};
