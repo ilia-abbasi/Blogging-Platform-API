@@ -66,13 +66,13 @@ None of the properties can be null.
 
 ## Endpoints
 
-- `GET` -> `/posts`:  
+- `GET` -> `/posts`  
   Get all the posts in the database. A query parameter can be used here to filter the search results. `/posts?term=school` will only include the posts that has the word "school" anywhere in either their `title`, `content` or `category`. This search is case-insensitive so `school` and `SCHOOL` have the same effect. The status code will always be `200`. In response, `data` will be an array of posts.
 
-- `GET` -> `/posts/:id`:  
+- `GET` -> `/posts/:id`  
   Get the post with an ID of `:id` where `:id` is a positive integer. The status code will either be `200` or `404`. In response, `data` will be an object containing the post.
 
-- `POST` -> `/posts`:  
+- `POST` -> `/posts`  
   A post will be created in the database based on the request body. The request body must be a JSON object with the properties of a post. Only `title`, `content`, `category` and `tags` must be provided. For example:
 
   ```json
@@ -86,7 +86,7 @@ None of the properties can be null.
 
   The status code will either be `201`, or `400` in case of invalid data. In response, `data` will be the created post with all properties.
 
-- `PUT` -> `/posts/:id`:  
+- `PUT` -> `/posts/:id`  
   The post with an ID of `:id` will be updated based on the request body provided. The request body has the same rules mentioned in the previous endpoint but you are not obligated to provide all four properties. You can provide any of the properties you aim to change. For example:
 
   ```json
@@ -98,7 +98,7 @@ None of the properties can be null.
 
   The status code will either be `200`, `404`, or `400` in case of invalid data or empty request body. In response, `data` will be the updated post with all properties.
 
-- `DELETE` -> `/posts/:id`:  
+- `DELETE` -> `/posts/:id`  
   Delete the post with an ID of `:id`. The status code will either be `204`, `404`, or `400` in case of invalid `:id`. Response body will be empty if the status code is `204`.
 
 ## Status codes
