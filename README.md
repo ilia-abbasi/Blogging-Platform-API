@@ -51,6 +51,7 @@ There are no authentication or authorization.
 
 - dotenv
 - express
+- express-validator
 - lodash
 - morgan
 - pg
