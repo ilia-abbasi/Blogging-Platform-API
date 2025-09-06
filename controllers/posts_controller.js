@@ -11,13 +11,15 @@ const {
 const { matchedData, validationResult } = require("express-validator");
 
 async function createPost(req, res, next) {
-  const { title, content, category, tags } = matchedData(req);
   const validationErrors = validationResult(req).errors;
 
   if (!isEmpty(validationErrors)) {
     const resObj = makeResponseObj(false, validationErrors[0].msg);
+
     return res.status(400).json(resObj);
   }
+
+  const { title, content, category, tags } = matchedData(req);
 
   const query = `
   INSERT INTO posts (title, content, category, tags, created_at, updated_at)
@@ -44,33 +46,17 @@ async function createPost(req, res, next) {
 }
 
 async function updatePost(req, res, next) {
-  const id = Number(req.params.id);
-  const title = req.body.title;
-  const content = req.body.content;
-  const category = req.body.category;
-  const tags = req.body.tags;
-  const validationResults = [];
-  const providedParams = {};
+  const validationErrors = validationResult(req).errors;
 
-  validationResults.push(validateID(id));
-  if (title) {
-    validationResults.push(validateTitle(title));
-    providedParams.title = title;
-  }
-  if (content) {
-    validationResults.push(validateContent(content));
-    providedParams.content = content;
-  }
-  if (category) {
-    validationResults.push(validateCategory(category));
-    providedParams.category = category;
-  }
-  if (tags) {
-    validationResults.push(validateTags(tags));
-    providedParams.tags = tags;
+  if (!isEmpty(validationErrors)) {
+    const resObj = makeResponseObj(false, validationErrors[0].msg);
+    return res.status(400).json(resObj);
   }
 
-  if (isEmpty(providedParams)) {
+  const data = matchedData(req);
+  const { id, title, content, category, tags } = matchedData(req);
+
+  if (Object.keys(data).length < 2) {
     const resObj = makeResponseObj(
       false,
       "At least one parameter must be provided to update the post"
@@ -79,12 +65,9 @@ async function updatePost(req, res, next) {
     return res.status(400).json(resObj);
   }
 
-  for (const validationResult of validationResults) {
-    if (validationResult === "success") {
-      continue;
-    }
+  if (!isEmpty(validationErrors)) {
+    const resObj = makeResponseObj(false, validationErrors[0].msg);
 
-    const resObj = makeResponseObj(false, validationResult);
     return res.status(400).json(resObj);
   }
 

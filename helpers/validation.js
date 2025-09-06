@@ -48,11 +48,24 @@ const tagsItemsValidator = () =>
     .isLength({ max: 30 })
     .withMessage("tags items length can not exceed 30");
 
+const createPostValidator = () => [
+  titleValidator(),
+  contentValidator(),
+  categoryValidator(),
+  tagsValidator(),
+  tagsItemsValidator(),
+];
+
+const updatePostValidator = () => [
+  idValidator(),
+  titleValidator().optional(),
+  contentValidator().optional(),
+  categoryValidator().optional(),
+  tagsValidator().optional(),
+  tagsItemsValidator().optional(),
+];
+
 module.exports = {
-  idValidator,
-  titleValidator,
-  contentValidator,
-  categoryValidator,
-  tagsValidator,
-  tagsItemsValidator,
+  createPostValidator,
+  updatePostValidator,
 };
