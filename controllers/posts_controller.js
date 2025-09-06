@@ -1,13 +1,6 @@
 const { isEmpty } = require("lodash");
 const { pool } = require("../models/db.js");
 const { makeResponseObj } = require("../models/response.js");
-const {
-  validateTitle,
-  validateContent,
-  validateCategory,
-  validateTags,
-  validateID,
-} = require("../helpers/validation.js");
 const { matchedData, validationResult } = require("express-validator");
 
 async function createPost(req, res, next) {
