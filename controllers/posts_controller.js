@@ -177,8 +177,17 @@ async function getSinglePost(req, res, next) {
 }
 
 async function getPosts(req, res, next) {
+  const validationErrors = validationResult(req).errors;
+
+  if (!isEmpty(validationErrors)) {
+    const resObj = makeResponseObj(false, validationErrors[0].msg);
+
+    return res.status(400).json(resObj);
+  }
+
+  const { term } = matchedData(req);
+
   let query = "SELECT * FROM posts";
-  const term = req.query.term;
 
   if (term) {
     query = `
