@@ -8,25 +8,14 @@ const {
   validateTags,
   validateID,
 } = require("../helpers/validation.js");
+const { matchedData, validationResult } = require("express-validator");
 
 async function createPost(req, res, next) {
-  const title = req.body.title;
-  const content = req.body.content;
-  const category = req.body.category;
-  const tags = req.body.tags;
-  const validationResults = [];
+  const { title, content, category, tags } = matchedData(req);
+  const validationErrors = validationResult(req).errors;
 
-  validationResults.push(validateTitle(title));
-  validationResults.push(validateContent(content));
-  validationResults.push(validateCategory(category));
-  validationResults.push(validateTags(tags));
-
-  for (const validationResult of validationResults) {
-    if (validationResult === "success") {
-      continue;
-    }
-
-    const resObj = makeResponseObj(false, validationResult);
+  if (!isEmpty(validationErrors)) {
+    const resObj = makeResponseObj(false, validationErrors[0].msg);
     return res.status(400).json(resObj);
   }
 
