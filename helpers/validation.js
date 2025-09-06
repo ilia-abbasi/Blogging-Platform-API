@@ -1,85 +1,58 @@
-const { isArray, isInteger } = require("lodash");
+const { body, param } = require("express-validator");
 
-function validateID(id) {
-  if (isNaN(id)) {
-    return "ID must be a number";
-  }
-  if (!isInteger(id)) {
-    return "ID must be an integer";
-  }
+const idValidator = () =>
+  param("id")
+    .notEmpty()
+    .withMessage("ID must be a number")
+    .isInt()
+    .withMessage("ID must be an integer");
 
-  return "success";
-}
+const titleValidator = () =>
+  body("title")
+    .notEmpty()
+    .withMessage("title is required")
+    .isString()
+    .withMessage("title must be a string")
+    .isLength({ max: 50 })
+    .withMessage("title length can not exceed 50");
 
-function validateTitle(title) {
-  if (!title) {
-    return "title is required";
-  }
-  if (typeof title !== "string") {
-    return "title must be a string";
-  }
-  if (title.length > 50) {
-    return "title length can not exceed 50";
-  }
+const contentValidator = () =>
+  body("content")
+    .notEmpty()
+    .withMessage("content is required")
+    .isString()
+    .withMessage("content must be a string")
+    .isLength({ max: 10000 })
+    .withMessage("content length can not exceed 10000");
 
-  return "success";
-}
+const categoryValidator = () =>
+  body("category")
+    .notEmpty()
+    .withMessage("category is required")
+    .isString()
+    .withMessage("category must be a string")
+    .isLength({ max: 30 })
+    .withMessage("category length can not exceed 30");
 
-function validateContent(content) {
-  if (!content) {
-    return "content is required";
-  }
-  if (typeof content !== "string") {
-    return "content must be a string";
-  }
-  if (content.length > 10000) {
-    return "content length can not exceed 10000";
-  }
+const tagsValidator = () =>
+  body("tags")
+    .notEmpty()
+    .withMessage("tags is required")
+    .isArray({ min: 1 })
+    .withMessage("tags must be a non-empty array");
 
-  return "success";
-}
-
-function validateCategory(category) {
-  if (!category) {
-    return "category is required";
-  }
-  if (typeof category !== "string") {
-    return "category must be a string";
-  }
-  if (category.length > 30) {
-    return "category length can not exceed 30";
-  }
-
-  return "success";
-}
-
-function validateTags(tags) {
-  if (!tags) {
-    return "tags is required";
-  }
-  if (!isArray(tags)) {
-    return "tags must be an array";
-  }
-  if (!tags.length) {
-    return "tags must have at least 1 item";
-  }
-
-  for (const tag of tags) {
-    if (typeof tag !== "string") {
-      return "tags items must be strings";
-    }
-    if (tag.length > 30) {
-      return "tags items length can not exceed 30";
-    }
-  }
-
-  return "success";
-}
+const tagsItemsValidator = () =>
+  body("tags.*")
+    .isString()
+    .withMessage("tags items must be strings")
+    .isLength({ max: 30 })
+    .withMessage("tags items length can not exceed 30");
 
 module.exports = {
-  validateID,
-  validateTitle,
-  validateContent,
-  validateCategory,
-  validateTags,
+  idValidator,
+  titleValidator,
+  contentValidator,
+  categoryValidator,
+  tagsValidator,
+  tagsItemsValidator,
 };
