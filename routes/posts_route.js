@@ -10,18 +10,20 @@ const {
 } = require("../controllers/posts_controller");
 const { send404Error, send405Error } = require("../models/response");
 const {
+  termValidator,
+  idValidator,
   createPostValidator,
   updatePostValidator,
 } = require("../helpers/validation");
 const router = express.Router();
 
-router.get("/", getPosts);
+router.get("/", termValidator(), getPosts);
 router.post("/", createPostValidator(), createPost);
 router.all("/", send405Error(["GET", "POST"]));
 
-router.get("/:id", getSinglePost);
+router.get("/:id", idValidator(), getSinglePost);
 router.put("/:id", updatePostValidator(), updatePost);
-router.delete("/:id", deletePost);
+router.delete("/:id", idValidator(), deletePost);
 router.all("/:id", send405Error(["GET", "PUT", "DELETE"]));
 
 router.all("/{*anything}", send404Error);

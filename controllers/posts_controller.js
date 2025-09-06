@@ -50,11 +50,11 @@ async function updatePost(req, res, next) {
 
   if (!isEmpty(validationErrors)) {
     const resObj = makeResponseObj(false, validationErrors[0].msg);
+
     return res.status(400).json(resObj);
   }
 
   const data = matchedData(req);
-  const { id, title, content, category, tags } = matchedData(req);
 
   if (Object.keys(data).length < 2) {
     const resObj = makeResponseObj(
@@ -65,15 +65,10 @@ async function updatePost(req, res, next) {
     return res.status(400).json(resObj);
   }
 
-  if (!isEmpty(validationErrors)) {
-    const resObj = makeResponseObj(false, validationErrors[0].msg);
-
-    return res.status(400).json(resObj);
-  }
-
   let query = "UPDATE posts SET updated_at = NOW(), ";
   let i = 1;
-  for (const key in providedParams) {
+  for (const key in data) {
+    if (key === "id") continue;
     query = `${query}${key} = $${i}, `;
     i++;
   }
@@ -82,7 +77,10 @@ async function updatePost(req, res, next) {
 
   let result;
   try {
-    result = await pool.query(query, [...Object.values(providedParams), id]);
+    result = await pool.query(query, [
+      ...Object.values(data).slice(1),
+      data.id,
+    ]);
   } catch (err) {
     console.log(`Database: Could not update post. ${err}`);
 
@@ -91,14 +89,14 @@ async function updatePost(req, res, next) {
   }
 
   if (isEmpty(result.rows[0])) {
-    console.log(`Database: No posts found with an ID of ${id}`);
+    console.log(`Database: No posts found with an ID of ${data.id}`);
 
     const resObj = makeResponseObj(false, "Post was not found");
 
     return res.status(404).json(resObj);
   }
 
-  console.log(`Database: Updated post with an ID of ${id}`);
+  console.log(`Database: Updated post with an ID of ${data.id}`);
 
   const resObj = makeResponseObj(true, "Updated post", result.rows[0]);
 

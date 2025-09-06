@@ -1,4 +1,4 @@
-const { body, param } = require("express-validator");
+const { body, param, query } = require("express-validator");
 
 const idValidator = () =>
   param("id")
@@ -48,6 +48,16 @@ const tagsItemsValidator = () =>
     .isLength({ max: 30 })
     .withMessage("tags items length can not exceed 30");
 
+const termValidator = () =>
+  query("term")
+    .optional()
+    .notEmpty()
+    .withMessage("term must have a value if provided")
+    .isString()
+    .withMessage("term must be a string")
+    .isLength({ max: 500 })
+    .withMessage("term length can not exceed 500");
+
 const createPostValidator = () => [
   titleValidator(),
   contentValidator(),
@@ -66,6 +76,8 @@ const updatePostValidator = () => [
 ];
 
 module.exports = {
+  idValidator,
+  termValidator,
   createPostValidator,
   updatePostValidator,
 };
