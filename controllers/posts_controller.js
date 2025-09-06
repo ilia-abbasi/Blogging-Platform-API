@@ -104,14 +104,15 @@ async function updatePost(req, res, next) {
 }
 
 async function deletePost(req, res, next) {
-  const id = Number(req.params.id);
-  const validationResult = validateID(id);
+  const validationErrors = validationResult(req).errors;
 
-  if (validationResult !== "success") {
-    const resObj = makeResponseObj(false, validationResult);
+  if (!isEmpty(validationErrors)) {
+    const resObj = makeResponseObj(false, validationErrors[0].msg);
 
     return res.status(400).json(resObj);
   }
+
+  const { id } = matchedData(req);
 
   const query = "DELETE FROM posts WHERE id = $1;";
   let result;
@@ -141,14 +142,15 @@ async function deletePost(req, res, next) {
 }
 
 async function getSinglePost(req, res, next) {
-  const id = Number(req.params.id);
-  const validationResult = validateID(id);
+  const validationErrors = validationResult(req).errors;
 
-  if (validationResult !== "success") {
-    const resObj = makeResponseObj(false, validationResult);
+  if (!isEmpty(validationErrors)) {
+    const resObj = makeResponseObj(false, validationErrors[0].msg);
 
     return res.status(400).json(resObj);
   }
+
+  const { id } = matchedData(req);
 
   const query = "SELECT * FROM posts WHERE id = $1;";
   let result;
