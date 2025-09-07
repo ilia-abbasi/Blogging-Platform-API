@@ -35,7 +35,11 @@ There are no authentication or authorization.
    DB_PORT=database_port
    ```
 
-4. Create the `posts` table in your postgres database based on the [validation rules](https://github.com/ilia-abbasi/Blogging-Platform-API/blob/main/Documentation.md#validation-rules).
+4. Create the `posts` table in your database:
+
+   ```sh
+   npm run setup
+   ```
 
 ## Usage
 
