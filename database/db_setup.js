@@ -11,7 +11,7 @@ const client = new Client({
 
 async function createPostsTable() {
   await client.connect();
-  const result = await client.query(`
+  await client.query(`
     CREATE TABLE posts(
     id serial PRIMARY KEY,
     title VARCHAR (50) NOT NULL,
