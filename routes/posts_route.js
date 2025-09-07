@@ -8,7 +8,7 @@ const {
   getSinglePost,
   getPosts,
 } = require("../controllers/posts_controller");
-const { send404Error, send405Error } = require("../models/response");
+const { send404Error, send405Error } = require("../helpers/response");
 const {
   termValidator,
   idValidator,

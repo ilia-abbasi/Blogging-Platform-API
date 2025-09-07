@@ -6,7 +6,7 @@ const {
   send404Error,
   send418Error,
   generalErrorHandler,
-} = require("./models/response.js");
+} = require("./helpers/response.js");
 const app = express();
 const port = process.env.PORT;
 
