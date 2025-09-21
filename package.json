@@ -2,10 +2,10 @@
   "name": "blogging-platform-api",
   "version": "1.0.0",
   "description": "The project assignment for roadmap.sh",
-  "main": "index.js",
+  "main": "./app/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node ./app/index.js",
+    "dev": "nodemon ./app/index.js",
     "setup": "node ./database/db_setup.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

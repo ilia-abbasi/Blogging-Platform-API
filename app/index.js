@@ -1,12 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
-const postsRouter = require("./routes/posts_route.js");
+const postsRouter = require("../routes/posts_route.js");
 const {
   send404Error,
   send418Error,
   generalErrorHandler,
-} = require("./helpers/response.js");
+} = require("../helpers/response.js");
 const app = express();
 const port = process.env.PORT;
 
