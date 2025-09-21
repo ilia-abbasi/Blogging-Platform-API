@@ -4,8 +4,8 @@ const idValidator = () =>
   param("id")
     .notEmpty()
     .withMessage("ID must be a number")
-    .isInt()
-    .withMessage("ID must be an integer");
+    .isInt({ min: 1 })
+    .withMessage("ID must be a positive integer");
 
 const titleValidator = () =>
   body("title")
@@ -51,6 +51,7 @@ const tagsItemsValidator = () =>
 const termValidator = () =>
   query("term")
     .optional()
+    .trim()
     .notEmpty()
     .withMessage("term must have a value if provided")
     .isString()
